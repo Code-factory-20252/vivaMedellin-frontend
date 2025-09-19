@@ -1,3 +1,8 @@
+import { Input } from "@/components/ui/input"
+
 export default function Page() {
-  return <><h2>Crea tu cuenta</h2></>;
+  return <div className="flex flex-col items-center gap-5">
+    <h2 className="text-slate-700 font-semibold text-[30px] leading-[36px] tracking-[-0.75%] text-center">Crea tu cuenta</h2>
+    <p className="text-slate-400 font-semibold text-[14px] leading-[20px] tracking-[0%] text-center">Únete a la comunidad de eventos más vibrante de Medellín.</p>
+  </div>;
 }
