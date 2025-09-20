@@ -1,4 +1,4 @@
-import InputFormat from "@/app/components/Input";
+import InputFormat from "@/app/components/FormInput";
 
 export default function Page() {
   return <div className="flex flex-col items-center gap-5">
