@@ -1,4 +1,4 @@
-import InputFormat from "@/app/components/FormInput";
+import InputFormat from "@/app/components/CustomInput";
 
 export default function Page() {
   return (
