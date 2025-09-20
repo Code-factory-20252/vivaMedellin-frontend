@@ -11,10 +11,14 @@ export default function Page() {
       <h2 className="text-slate-700 font-semibold text-2xl leading-9 text-center">
         Inicio de sesión
       </h2>
-      <div className="flex flex-col gap-3 w-full max-w-sm">
-        <InputFormat placeholder="Correo electrónico*" type="email" />
-        <InputFormat placeholder="Contraseña*" type="password" />
-      </div>
+<div className="flex flex-col gap-1">
+  <label className="text-sm text-gray-600">Correo electrónico*</label>
+  <InputFormat />
+</div>
+<div className="flex flex-col gap-1">
+  <label className="text-sm text-gray-600">Contraseña*</label>
+  <InputFormat />
+</div>
       <a
         href="#"
         className="text-sm text-blue-500 hover:underline self-end pr-4"
