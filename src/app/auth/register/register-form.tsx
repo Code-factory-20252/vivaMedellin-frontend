@@ -31,6 +31,9 @@ export default function RegisterForm() {
     }
   });
 
+  function onSubmit(values: z.infer<typeof registerSchema>) {
+    console.log(values);
+  }
 
   return <Form {...form}>
     <form action="onSubmit={form.handleSubmit(onSubmit)}" className="flex flex-col gap-5">
@@ -41,7 +44,7 @@ export default function RegisterForm() {
           <FormItem>
             <CustomLabel htmlFor="email">Correo electrónico</CustomLabel>
             <FormControl>
-              <CustomInput type="email" placeholder="Ingrese el correo electrónico" />
+              <CustomInput id="email" type="email" placeholder="Ingrese el correo electrónico" required />
             </FormControl>
           </FormItem>
         )}
