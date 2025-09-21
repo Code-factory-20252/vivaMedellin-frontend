@@ -9,8 +9,9 @@ import {
   FormItem,
 } from "@/components/ui/form"
 
-import FormInput from "@/app/components/CustomInput";
-import { FormLabel } from "@/components/ui/form";
+import CustomInput from "@/app/components/CustomInput";
+import CustomButton from "@/app/components/CustomButton";
+import CustomLabel from "@/app/components/CustomLabel";
 
 const registerSchema = z.object({
   username: z.string().min(1, "El nombre de usuario es obligatorio"),
@@ -33,15 +34,17 @@ export default function RegisterForm() {
 
   return <Form {...form}>
     <FormField
+      control={form.control}
       name="email"
       render={() => (
         <FormItem>
-          <FormLabel htmlFor="email">Correo electrónico</FormLabel>
+          <CustomLabel htmlFor="email">Correo electrónico</CustomLabel>
           <FormControl>
-            <FormInput type="email" placeholder="Ingrese el correo electrónico" />
+            <CustomInput type="email" placeholder="Ingrese el correo electrónico" />
           </FormControl>
         </FormItem>
       )}
     />
+    <CustomButton>Registrarse</CustomButton>
   </Form>
 }
