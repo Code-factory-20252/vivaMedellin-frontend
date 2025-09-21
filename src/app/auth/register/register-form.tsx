@@ -19,7 +19,12 @@ const registerSchema = z.object({
   email: z.string().min(1, "El correo electrónico es obligatorio"),
   password: z.string(),
   confirmPassword: z.string(),
-});
+}).refine(
+  (data) => data.password === data.confirmPassword,
+  {
+    message: "Las contraseñas no coinciden",
+    path: ["confirmPassword"]
+  });
 
 export default function RegisterForm() {
   const form = useForm<z.infer<typeof registerSchema>>({
