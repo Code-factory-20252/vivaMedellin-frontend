@@ -10,9 +10,9 @@ import {
   FormMessage
 } from "@/components/ui/form"
 
-import CustomInput from "@/app/components/CustomInput";
-import CustomButton from "@/app/components/CustomButton";
-import CustomLabel from "@/app/components/CustomLabel";
+import CustomInput from "@/components/ui/CustomInput";
+import CustomButton from "@/components/ui/CustomButton";
+import CustomLabel from "@/components/ui/CustomLabel";
 
 const registerSchema = z.object({
   username: z.string().nonempty("El nombre de usuario es obligatorio"),
