@@ -33,18 +33,20 @@ export default function RegisterForm() {
 
 
   return <Form {...form}>
-    <FormField
-      control={form.control}
-      name="email"
-      render={() => (
-        <FormItem>
-          <CustomLabel htmlFor="email">Correo electrónico</CustomLabel>
-          <FormControl>
-            <CustomInput type="email" placeholder="Ingrese el correo electrónico" />
-          </FormControl>
-        </FormItem>
-      )}
-    />
-    <CustomButton>Registrarse</CustomButton>
+    <form action="onSubmit={form.handleSubmit(onSubmit)}" className="flex flex-col gap-5">
+      <FormField
+        control={form.control}
+        name="email"
+        render={() => (
+          <FormItem>
+            <CustomLabel htmlFor="email">Correo electrónico</CustomLabel>
+            <FormControl>
+              <CustomInput type="email" placeholder="Ingrese el correo electrónico" />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+      <CustomButton>Registrarse</CustomButton>
+    </form>
   </Form>
 }
