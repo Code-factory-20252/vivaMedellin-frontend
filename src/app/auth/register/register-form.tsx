@@ -40,12 +40,51 @@ export default function RegisterForm() {
     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <FormField
         control={form.control}
+        name="username"
+        render={({ field }) => (
+          <FormItem>
+            <CustomLabel htmlFor={field.name}>Nombre de Usuario</CustomLabel>
+            <FormControl>
+              <CustomInput id={field.name} type="text" placeholder="Ingrese un nombre de usuario único" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
         name="email"
         render={({ field }) => (
           <FormItem>
-            <CustomLabel htmlFor="email">Correo electrónico</CustomLabel>
+            <CustomLabel htmlFor={field.name}>Correo electrónico</CustomLabel>
             <FormControl>
-              <CustomInput id="email" type="email" placeholder="Ingrese el correo electrónico" {...field} />
+              <CustomInput id={field.name} type="email" placeholder="Ingrese el correo electrónico" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="password"
+        render={({ field }) => (
+          <FormItem>
+            <CustomLabel htmlFor={field.name}>Contraseña</CustomLabel>
+            <FormControl>
+              <CustomInput id={field.name} type="password" placeholder="Crea una contraseña" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="confirmPassword"
+        render={({ field }) => (
+          <FormItem>
+            <CustomLabel htmlFor={field.name}>Confirmar contraseña</CustomLabel>
+            <FormControl>
+              <CustomInput id={field.name} type="password" placeholder="Vuelva a ingresar la contraseña" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
