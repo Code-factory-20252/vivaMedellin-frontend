@@ -7,6 +7,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormMessage
 } from "@/components/ui/form"
 
 import CustomInput from "@/app/components/CustomInput";
@@ -36,20 +37,21 @@ export default function RegisterForm() {
   }
 
   return <Form {...form}>
-    <form action="onSubmit={form.handleSubmit(onSubmit)}" className="flex flex-col gap-5">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <FormField
         control={form.control}
         name="email"
-        render={() => (
+        render={({ field }) => (
           <FormItem>
             <CustomLabel htmlFor="email">Correo electrónico</CustomLabel>
             <FormControl>
-              <CustomInput id="email" type="email" placeholder="Ingrese el correo electrónico" required />
+              <CustomInput id="email" type="email" placeholder="Ingrese el correo electrónico" {...field} />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
-      <CustomButton>Registrarse</CustomButton>
+      <CustomButton type="submit">Registrarse</CustomButton>
     </form>
   </Form>
 }
