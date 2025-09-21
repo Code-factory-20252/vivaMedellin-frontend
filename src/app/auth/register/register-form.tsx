@@ -15,9 +15,9 @@ import CustomButton from "@/app/components/CustomButton";
 import CustomLabel from "@/app/components/CustomLabel";
 
 const registerSchema = z.object({
-  username: z.string().min(1, "El nombre de usuario es obligatorio"),
-  email: z.string().min(1, "El correo electrónico es obligatorio"),
-  password: z.string(),
+  username: z.string().nonempty("El nombre de usuario es obligatorio"),
+  email: z.email("El correo electrónico no es válido"),
+  password: z.string().regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial"),
   confirmPassword: z.string(),
 }).refine(
   (data) => data.password === data.confirmPassword,
