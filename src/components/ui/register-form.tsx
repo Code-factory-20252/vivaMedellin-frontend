@@ -18,7 +18,7 @@ const registerSchema = z.object({
   username: z.string().nonempty("El nombre de usuario es obligatorio"),
   email: z.email("El correo electrónico no es válido"),
   password: z.string().regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial"),
-  confirmPassword: z.string(),
+  confirmPassword: z.string().nonempty("Por favor, confirma tu contraseña"),
 }).refine(
   (data) => data.password === data.confirmPassword,
   {
