@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -9,6 +10,7 @@ import {
   FormItem,
   FormMessage
 } from "@/components/ui/form"
+
 
 import CustomInput from "@/components/ui/CustomInput";
 import CustomButton from "@/components/ui/CustomButton";
@@ -31,8 +33,8 @@ const registerSchema = z.object({
   });
 
 export default function RegisterForm() {
-
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const router = useRouter();
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -45,68 +47,74 @@ export default function RegisterForm() {
   });
 
   function onSubmit(values: z.infer<typeof registerSchema>) {
-    setDialogOpen(true);
+    setIsDialogOpen(true);
   }
 
-  return <Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
-      <FormField
-        control={form.control}
-        name="username"
-        render={({ field }) => (
-          <FormItem>
-            <CustomLabel htmlFor={field.name}>Nombre de Usuario</CustomLabel>
-            <FormControl>
-              <CustomInput id={field.name} type="text" placeholder="Ingrese un nombre de usuario único" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="email"
-        render={({ field }) => (
-          <FormItem>
-            <CustomLabel htmlFor={field.name}>Correo electrónico</CustomLabel>
-            <FormControl>
-              <CustomInput id={field.name} type="email" placeholder="Ingrese el correo electrónico" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="password"
-        render={({ field }) => (
-          <FormItem>
-            <CustomLabel htmlFor={field.name}>Contraseña</CustomLabel>
-            <FormControl>
-              <CustomInput id={field.name} type="password" placeholder="Crea una contraseña" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="confirmPassword"
-        render={({ field }) => (
-          <FormItem>
-            <CustomLabel htmlFor={field.name}>Confirmar contraseña</CustomLabel>
-            <FormControl>
-              <CustomInput id={field.name} type="password" placeholder="Vuelva a ingresar la contraseña" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <CustomButton type="submit">Registrarse</CustomButton>
-      <p className="self-center leading-2 text-slate-700">
-        ¿Ya tienes cuenta?l <Link className="font-semibold text-sky-500" href='./login'>Iniciar sesión</Link>
-      </p>
-    </form>
-    <RegisterPopup dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} />
-  </Form>
+
+  return <>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <CustomLabel htmlFor={field.name}>Nombre de Usuario</CustomLabel>
+              <FormControl>
+                <CustomInput id={field.name} type="text" placeholder="Ingrese un nombre de usuario único" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <CustomLabel htmlFor={field.name}>Correo electrónico</CustomLabel>
+              <FormControl>
+                <CustomInput id={field.name} type="email" placeholder="Ingrese el correo electrónico" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <CustomLabel htmlFor={field.name}>Contraseña</CustomLabel>
+              <FormControl>
+                <CustomInput id={field.name} type="password" placeholder="Crea una contraseña" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <CustomLabel htmlFor={field.name}>Confirmar contraseña</CustomLabel>
+              <FormControl>
+                <CustomInput id={field.name} type="password" placeholder="Vuelva a ingresar la contraseña" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <CustomButton type="submit">Registrarse</CustomButton>
+        <p className="self-center leading-2 text-slate-700">
+          ¿Ya tienes cuenta?l <Link className="font-semibold text-sky-500" href='./login'>Iniciar sesión</Link>
+        </p>
+      </form>
+    </Form>
+    <RegisterPopup isDialogOpen={isDialogOpen} setIsDialogOpen={(isDialogOpen) => {
+      setIsDialogOpen(isDialogOpen)
+      if (!isDialogOpen) router.push('/')
+    }} />
+  </>
 }

@@ -4,16 +4,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Circle, CircleCheck } from "lucide-react";
+import { CircleCheck } from "lucide-react";
 
 type registerPopupProps = {
-  dialogOpen: boolean;
-  setDialogOpen: (open: boolean) => void;
+  isDialogOpen: boolean;
+  setIsDialogOpen: (open: boolean) => void;
 }
 
-export default function RegisterPopup({ dialogOpen, setDialogOpen }: registerPopupProps) {
+export default function RegisterPopup({ isDialogOpen, setIsDialogOpen }: registerPopupProps) {
   return (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogContent className="font-geist [&>button:last-child]:hidden p-4 w-fit">
         <DialogHeader>
           <DialogTitle className="flex gap-3 font-medium text-sm">
