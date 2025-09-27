@@ -13,6 +13,7 @@ import {
 import CustomInput from "@/components/ui/CustomInput";
 import CustomButton from "@/components/ui/CustomButton";
 import CustomLabel from "@/components/ui/CustomLabel";
+import Link from "next/link";
 
 const registerSchema = z.object({
   username: z.string().nonempty("El nombre de usuario es obligatorio"),
@@ -97,7 +98,7 @@ export default function RegisterForm() {
       />
       <CustomButton type="submit">Registrarse</CustomButton>
       <p className="self-center leading-2 text-slate-700">
-        ¿Ya tienes cuenta?<span className="font-semibold text-sky-500"> Iniciar sesión</span>
+        ¿Ya tienes cuenta?l <Link className="font-semibold text-sky-500" href='./login'>Iniciar sesión</Link>
       </p>
     </form>
   </Form>
