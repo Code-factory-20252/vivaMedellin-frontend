@@ -16,7 +16,7 @@ import CustomButton from "@/components/ui/CustomButton";
 import CustomLabel from "@/components/ui/CustomLabel";
 
 const loginSchema = z.object({
-  email: z.string().email("El correo electrónico no es válido"),
+  email: z.email("El correo electrónico no es válido"),
   password: z.string().min(1, "La contraseña es obligatoria"),
 });
 
