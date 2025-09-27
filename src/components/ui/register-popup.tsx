@@ -1,10 +1,10 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { Circle, CircleCheck } from "lucide-react";
 
 type registerPopupProps = {
   dialogOpen: boolean;
@@ -14,9 +14,12 @@ type registerPopupProps = {
 export default function RegisterPopup({ dialogOpen, setDialogOpen }: registerPopupProps) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogContent className="font-geist">
+      <DialogContent className="font-geist [&>button:last-child]:hidden p-4 w-fit">
         <DialogHeader>
-          <DialogTitle>Has creado la cuenta correctamente. Inicia sesión.</DialogTitle>
+          <DialogTitle className="flex gap-3 font-medium text-sm">
+            <CircleCheck />
+            <p>Has creado la cuenta correctamente. Inicia sesión.</p>
+          </DialogTitle>
         </DialogHeader>
       </DialogContent>
     </Dialog>
