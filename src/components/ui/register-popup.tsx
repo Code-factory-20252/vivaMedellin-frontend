@@ -6,17 +6,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
-type Props = {}
+type registerPopupProps = {
+  dialogOpen: boolean;
+  setDialogOpen: (open: boolean) => void;
+}
 
-export default function registerPopup({ isDialogOpen, setIsDialogOpen }: { isDialogOpen: boolean, setIsDialogOpen: (open: boolean) => void }) {
+export default function RegisterPopup({ dialogOpen, setDialogOpen }: registerPopupProps) {
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogContent className="font-geist">
         <DialogHeader>
-          <DialogTitle>Registro exitoso</DialogTitle>
-          <DialogDescription>
-            Has creado la cuenta correctamente. Inicia sesión.
-          </DialogDescription>
+          <DialogTitle>Has creado la cuenta correctamente. Inicia sesión.</DialogTitle>
         </DialogHeader>
       </DialogContent>
     </Dialog>

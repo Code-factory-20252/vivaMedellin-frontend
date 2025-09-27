@@ -14,6 +14,9 @@ import CustomInput from "@/components/ui/CustomInput";
 import CustomButton from "@/components/ui/CustomButton";
 import CustomLabel from "@/components/ui/CustomLabel";
 import Link from "next/link";
+import React from "react";
+import RegisterPopup from "@/components/ui/register-popup";
+
 
 const registerSchema = z.object({
   username: z.string().nonempty("El nombre de usuario es obligatorio"),
@@ -28,6 +31,9 @@ const registerSchema = z.object({
   });
 
 export default function RegisterForm() {
+
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -39,7 +45,7 @@ export default function RegisterForm() {
   });
 
   function onSubmit(values: z.infer<typeof registerSchema>) {
-    console.log(values);
+    setDialogOpen(true);
   }
 
   return <Form {...form}>
@@ -101,5 +107,6 @@ export default function RegisterForm() {
         ¿Ya tienes cuenta?l <Link className="font-semibold text-sky-500" href='./login'>Iniciar sesión</Link>
       </p>
     </form>
+    <RegisterPopup dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} />
   </Form>
 }
