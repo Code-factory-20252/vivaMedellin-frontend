@@ -17,7 +17,7 @@ import CustomButton from "@/components/ui/CustomButton";
 import CustomLabel from "@/components/ui/CustomLabel";
 import Link from "next/link";
 import React from "react";
-import RegisterPopup from "@/components/ui/register-popup";
+import RegisterPopup from "@/components/ui/RegisterPopup";
 
 
 const registerSchema = z.object({
