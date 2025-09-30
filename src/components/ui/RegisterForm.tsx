@@ -108,7 +108,7 @@ export default function RegisterForm() {
         />
         <CustomButton type="submit">Registrarse</CustomButton>
         <p className="self-center leading-2 text-slate-700">
-          ¿Ya tienes cuenta?l <Link className="font-semibold text-sky-500" href='./login'>Iniciar sesión</Link>
+          ¿Ya tienes cuenta? <Link className="font-semibold text-sky-500" href='./login'>Iniciar sesión</Link>
         </p>
       </form>
     </Form>
