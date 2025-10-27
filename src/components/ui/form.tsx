@@ -44,14 +44,22 @@ const FormField = <
 
 const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext)
-  const itemContext = React.useContext(FormItemContext)
-  const { getFieldState } = useFormContext()
-  const formState = useFormState({ name: fieldContext.name })
-  const fieldState = getFieldState(fieldContext.name, formState)
-
   if (!fieldContext) {
     throw new Error("useFormField should be used within <FormField>")
   }
+
+  const itemContext = React.useContext(FormItemContext)
+
+  const formContext = useFormContext()
+  if (!formContext) {
+    throw new Error(
+      "useFormField must be used within a form wrapped by <Form> (FormProvider). Make sure to wrap your fields with <Form {...methods}>...",
+    )
+  }
+
+  const { getFieldState } = formContext
+  const formState = useFormState({ name: fieldContext.name })
+  const fieldState = getFieldState(fieldContext.name, formState)
 
   const { id } = itemContext
 

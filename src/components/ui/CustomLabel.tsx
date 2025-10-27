@@ -1,8 +1,7 @@
-import { FormLabel } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 
-export default function CustomLabel(props: React.ComponentProps<typeof FormLabel>) {
+export default function CustomLabel(props: React.ComponentProps<typeof Label>) {
   return (
-    <FormLabel {...props}
-      className="text-slate-900 font-medium leading-5" />
+    <Label {...props} className="text-slate-900 font-medium leading-5" />
   )
 }

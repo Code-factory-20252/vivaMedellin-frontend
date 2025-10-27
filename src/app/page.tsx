@@ -1,7 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
+import { createClient } from '@/lib/supabase/server'
+import { cookies } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore)
+  
   return (<>
   <div className="w-screen h-screen relative flex flex-col justify-around items-center">
     <Image fill className="-z-10 absolute opacity-30" src="/img/udea.jpg" alt="" />
