@@ -1,5 +1,4 @@
 
-'use client'; 
 
 import RegisterForm from "../../../components/ui/RegisterForm";
 
