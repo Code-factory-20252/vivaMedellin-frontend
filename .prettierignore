@@ -1,0 +1,10 @@
+# Ignorar node_modules
+node_modules/
+.next
+dist
+build
+coverage
+.env*
+!.env.example
+*.log
+.github/

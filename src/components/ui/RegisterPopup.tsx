@@ -1,15 +1,10 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { CircleCheck } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { CircleCheck } from 'lucide-react';
 
 type registerPopupProps = {
   isDialogOpen: boolean;
   setIsDialogOpen: (open: boolean) => void;
-}
+};
 
 export default function RegisterPopup({ isDialogOpen, setIsDialogOpen }: registerPopupProps) {
   return (
@@ -23,5 +18,5 @@ export default function RegisterPopup({ isDialogOpen, setIsDialogOpen }: registe
         </DialogHeader>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

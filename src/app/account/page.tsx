@@ -4,11 +4,28 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { MapPin, Calendar, User, Mail, Heart, Users, Calendar as CalendarIcon, ArrowLeft, Edit } from 'lucide-react';
+import {
+  MapPin,
+  Calendar,
+  User,
+  Mail,
+  Heart,
+  Users,
+  Calendar as CalendarIcon,
+  ArrowLeft,
+  Edit,
+} from 'lucide-react';
 import Link from 'next/link';
 
 interface Perfil {
@@ -39,27 +56,28 @@ export default function AccountPage() {
 
   useEffect(() => {
     const cargarDatos = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (!user) return;
 
-      // Cargar perfil del usuario
       const { data: perfilData } = await supabase
         .from('perfil')
-        .select(`
+        .select(
+          `
           *
-        `)
+        `
+        )
         .eq('id', user.id)
         .single();
 
-      // Cargar contadores de perfil
       const { data: contadoresData } = await supabase
         .from('vista_contadores_perfil')
         .select('*')
         .eq('id_usuario', user.id)
         .single();
 
-      // Cargar eventos favoritos
       const { data: favoritosData } = await supabase
         .from('eventos_favoritos')
         .select('*')
@@ -70,7 +88,7 @@ export default function AccountPage() {
         setProfile({
           ...perfilData,
           ...perfilData.perfil_complementario,
-          ...contadoresData
+          ...contadoresData,
         });
       }
 
@@ -106,9 +124,7 @@ export default function AccountPage() {
     return (
       <div className="container mx-auto py-8 text-center">
         <h2 className="text-2xl font-bold mb-4">Perfil no encontrado</h2>
-        <p className="text-muted-foreground mb-4">
-          No se pudo cargar la información del perfil.
-        </p>
+        <p className="text-muted-foreground mb-4">No se pudo cargar la información del perfil.</p>
         <Button asChild>
           <Link href="/account/edit">Completar perfil</Link>
         </Button>
@@ -119,7 +135,7 @@ export default function AccountPage() {
   const getInitials = (name: string) => {
     return name
       .split(' ')
-      .map(n => n[0])
+      .map((n) => n[0])
       .join('')
       .toUpperCase();
   };
@@ -142,8 +158,8 @@ export default function AccountPage() {
             <CardHeader className="items-center text-center justify-center pb-2">
               <div className="flex justify-center items-center">
                 <Avatar className="h-32 w-32 ring-4 ring-background">
-                  <AvatarImage 
-                    src={profile.avatar_url || ''} 
+                  <AvatarImage
+                    src={profile.avatar_url || ''}
                     alt={profile.nombre}
                     className="object-cover"
                   />
@@ -155,7 +171,7 @@ export default function AccountPage() {
 
               <div className="space-y-2 mt-4 w-full">
                 <CardTitle className="text-2xl">{profile.nombre}</CardTitle>
-                
+
                 <div className="flex items-center justify-center gap-2 text-muted-foreground">
                   <Mail className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
                   <span className="text-sm truncate max-w-[200px]" title={profile?.email}>
@@ -173,7 +189,7 @@ export default function AccountPage() {
                     <span>{profile.edad} años</span>
                   </div>
                 )}
-                
+
                 {profile.ubicacion && (
                   <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/50 transition-colors hover:bg-muted">
                     <MapPin className="h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
@@ -196,11 +212,15 @@ export default function AccountPage() {
               {profile.intereses && profile.intereses.length > 0 && (
                 <div className="pt-3 border-t">
                   <h4 className="text-sm font-semibold mb-2.5 text-foreground">Intereses</h4>
-                  <div className="flex flex-wrap gap-2" role="list" aria-label="Intereses del usuario">
+                  <div
+                    className="flex flex-wrap gap-2"
+                    role="list"
+                    aria-label="Intereses del usuario"
+                  >
                     {profile.intereses.map((interes, index) => (
-                      <Badge 
-                        key={index} 
-                        variant="secondary" 
+                      <Badge
+                        key={index}
+                        variant="secondary"
                         className="text-xs px-2.5 py-1 transition-all duration-200 hover:scale-105 hover:shadow-sm cursor-default"
                         role="listitem"
                       >
@@ -213,9 +233,9 @@ export default function AccountPage() {
             </CardContent>
 
             <CardFooter className="pt-4 px-6 pb-6">
-              <Button 
-                asChild 
-                variant="outline" 
+              <Button
+                asChild
+                variant="outline"
                 className="w-full group transition-all duration-200 hover:bg-primary hover:text-primary-foreground hover:border-primary"
               >
                 <Link href="/account/edit" className="flex items-center justify-center gap-2">
@@ -262,9 +282,7 @@ export default function AccountPage() {
           <Card>
             <CardHeader>
               <CardTitle>Actividad reciente</CardTitle>
-              <CardDescription>
-                Tu actividad y eventos recientes
-              </CardDescription>
+              <CardDescription>Tu actividad y eventos recientes</CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="favoritos" className="w-full">
@@ -278,29 +296,28 @@ export default function AccountPage() {
                     Actividad reciente
                   </TabsTrigger>
                 </TabsList>
-                
+
                 <TabsContent value="favoritos" className="mt-6">
                   {eventosFavoritos.length > 0 ? (
                     <div className="space-y-4">
                       {eventosFavoritos.map((evento) => (
-                        <div 
-                          key={evento.id} 
+                        <div
+                          key={evento.id}
                           className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
                         >
                           <div>
                             <h4 className="font-medium">{evento.titulo_evento}</h4>
                             <p className="text-sm text-muted-foreground">
-                              Añadido el {new Date(evento.creado_en).toLocaleDateString('es-ES', {
+                              Añadido el{' '}
+                              {new Date(evento.creado_en).toLocaleDateString('es-ES', {
                                 day: 'numeric',
                                 month: 'long',
-                                year: 'numeric'
+                                year: 'numeric',
                               })}
                             </p>
                           </div>
                           <Button variant="outline" size="sm" asChild>
-                            <Link href={`/eventos/${evento.id}`}>
-                              Ver evento
-                            </Link>
+                            <Link href={`/eventos/${evento.id}`}>Ver evento</Link>
                           </Button>
                         </div>
                       ))}
@@ -316,15 +333,13 @@ export default function AccountPage() {
                       </p>
                       <div className="mt-6">
                         <Button asChild>
-                          <Link href="/dashboard">
-                            Explorar eventos
-                          </Link>
+                          <Link href="/dashboard">Explorar eventos</Link>
                         </Button>
                       </div>
                     </div>
                   )}
                 </TabsContent>
-                
+
                 <TabsContent value="actividad" className="mt-6">
                   <div className="text-center py-8">
                     <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted">

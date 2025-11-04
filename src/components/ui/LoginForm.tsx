@@ -1,38 +1,32 @@
-"use client";
-import React from 'react'
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+'use client';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage
-} from "@/components/ui/form";
-import { useAlert } from './Toast'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { useAlert } from './Toast';
 
-import CustomInput from "@/components/ui/CustomInput";
-import CustomButton from "@/components/ui/CustomButton";
-import CustomLabel from "@/components/ui/CustomLabel";
+import CustomInput from '@/components/ui/CustomInput';
+import CustomButton from '@/components/ui/CustomButton';
+import CustomLabel from '@/components/ui/CustomLabel';
 
 const loginSchema = z.object({
-  email: z.email("El correo electrónico no es válido"),
-  password: z.string().min(1, "La contraseña es obligatoria"),
+  email: z.email('El correo electrónico no es válido'),
+  password: z.string().min(1, 'La contraseña es obligatoria'),
 });
 
 export default function LoginForm() {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
-    setLoading(true)
+    setLoading(true);
     const formData = new FormData();
     formData.set('email', values.email);
     formData.set('password', values.password);
@@ -41,33 +35,41 @@ export default function LoginForm() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         body: formData,
-      })
+      });
       if (res.redirected) {
-        // show an alert and give it a tiny moment to appear before redirecting
-        alert.show({ title: 'Ha iniciado sesión con éxito', description: 'Redirigiendo...', variant: 'default' })
+        alert.show({
+          title: 'Ha iniciado sesión con éxito',
+          description: 'Redirigiendo...',
+          variant: 'default',
+        });
         setTimeout(() => {
-          window.location.href = res.url
-        }, 500)
-        return
+          window.location.href = res.url;
+        }, 500);
+        return;
       }
-      alert.show({ title: 'Error', description: 'No se pudo iniciar sesión', variant: 'destructive' })
-      setLoading(false)
-      window.location.href = '/error'
+      alert.show({
+        title: 'Error',
+        description: 'No se pudo iniciar sesión',
+        variant: 'destructive',
+      });
+      setLoading(false);
+      window.location.href = '/error';
     } catch (e) {
-      alert.show({ title: 'Error', description: 'No se pudo iniciar sesión', variant: 'destructive' })
-      setLoading(false)
-      window.location.href = '/error'
+      alert.show({
+        title: 'Error',
+        description: 'No se pudo iniciar sesión',
+        variant: 'destructive',
+      });
+      setLoading(false);
+      window.location.href = '/error';
     }
   }
-  const alert = useAlert()
-  const [loading, setLoading] = React.useState(false)
+  const alert = useAlert();
+  const [loading, setLoading] = React.useState(false);
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-5 w-full max-w-sm"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full max-w-sm">
         {/* Email */}
         <FormField
           control={form.control}
@@ -109,10 +111,7 @@ export default function LoginForm() {
         />
 
         {/* Forgot password */}
-        <a
-          href="#"
-          className="text-sm text-blue-500 hover:underline self-end"
-        >
+        <a href="#" className="text-sm text-blue-500 hover:underline self-end">
           ¿Olvidaste tu contraseña?
         </a>
 
@@ -121,8 +120,20 @@ export default function LoginForm() {
           {loading ? (
             <span className="inline-flex items-center gap-2">
               <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-25" />
-                <path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="4" className="opacity-75" />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  className="opacity-25"
+                />
+                <path
+                  d="M4 12a8 8 0 018-8"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  className="opacity-75"
+                />
               </svg>
               Iniciando...
             </span>

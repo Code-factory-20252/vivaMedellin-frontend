@@ -1,5 +1,5 @@
-import { Suspense } from "react";
-import RegisterForm from "../../../components/ui/RegisterForm";
+import { Suspense } from 'react';
+import RegisterForm from '../../../components/ui/RegisterForm';
 
 export default function Page() {
   return (

@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Heart, MapPin, Calendar, Clock } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -26,22 +33,22 @@ export default function Dashboard() {
 
   useEffect(() => {
     const cargarDatos = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      // Cargar todos los eventos
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       const { data: eventosData } = await supabase
         .from('eventos')
         .select('*')
         .order('fecha_inicio', { ascending: true });
 
-      // Cargar eventos favoritos del usuario
       const { data: favoritosData } = await supabase
         .from('eventos_favoritos')
         .select('id_evento')
         .eq('id_usuario', user?.id);
 
       setEventos(eventosData || []);
-      setFavoritos(favoritosData?.map(f => f.id_evento) || []);
+      setFavoritos(favoritosData?.map((f) => f.id_evento) || []);
       setLoading(false);
     };
 
@@ -49,7 +56,9 @@ export default function Dashboard() {
   }, []);
 
   const toggleFavorito = async (evento: Evento) => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return;
 
     const esFavorito = favoritos.includes(evento.id);
@@ -62,21 +71,17 @@ export default function Dashboard() {
           .eq('id_usuario', user.id)
           .eq('id_evento', evento.id);
       } else {
-        await supabase
-          .from('eventos_favoritos')
-          .insert([
-            { 
-              id_usuario: user.id, 
-              id_evento: evento.id,
-              titulo_evento: evento.titulo
-            }
-          ]);
+        await supabase.from('eventos_favoritos').insert([
+          {
+            id_usuario: user.id,
+            id_evento: evento.id,
+            titulo_evento: evento.titulo,
+          },
+        ]);
       }
 
-      setFavoritos(prev => 
-        esFavorito 
-          ? prev.filter(id => id !== evento.id)
-          : [...prev, evento.id]
+      setFavoritos((prev) =>
+        esFavorito ? prev.filter((id) => id !== evento.id) : [...prev, evento.id]
       );
     } catch (error) {
       console.error('Error al actualizar favoritos:', error);
@@ -87,14 +92,14 @@ export default function Dashboard() {
     return new Date(dateString).toLocaleDateString('es-ES', {
       day: 'numeric',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     });
   };
 
   const formatTime = (dateString: string) => {
     return new Date(dateString).toLocaleTimeString('es-ES', {
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -133,7 +138,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {eventos.map((evento) => {
           const esFavorito = favoritos.includes(evento.id);
-          
+
           return (
             <Card key={evento.id} className="overflow-hidden transition-all hover:shadow-lg">
               {evento.imagen_url && (
@@ -157,14 +162,14 @@ export default function Dashboard() {
                   </Button>
                 </div>
               )}
-              
+
               <CardHeader>
                 <CardTitle className="line-clamp-1">{evento.titulo}</CardTitle>
                 <CardDescription className="line-clamp-2 h-10">
                   {evento.descripcion}
                 </CardDescription>
               </CardHeader>
-              
+
               <CardContent className="space-y-3">
                 <div className="flex items-center text-sm text-muted-foreground">
                   <Calendar className="mr-2 h-4 w-4" />
@@ -181,7 +186,7 @@ export default function Dashboard() {
                   <span className="line-clamp-1">{evento.ubicacion}</span>
                 </div>
               </CardContent>
-              
+
               <CardFooter>
                 <Button variant="outline" className="w-full" asChild>
                   <Link href={`/eventos/${evento.id}`}>Ver más detalles</Link>

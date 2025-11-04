@@ -15,7 +15,6 @@ import {
 import { createClient } from '@/lib/supabase/client';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 
-
 export function DashboardNav({ user }: { user: any }) {
   const pathname = usePathname();
   const supabase = createClient();
@@ -66,9 +65,7 @@ export function DashboardNav({ user }: { user: any }) {
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email} />
-                  <AvatarFallback>
-                    {user.email ? getInitials(user.email) : 'U'}
-                  </AvatarFallback>
+                  <AvatarFallback>{user.email ? getInitials(user.email) : 'U'}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
@@ -78,16 +75,12 @@ export function DashboardNav({ user }: { user: any }) {
                   <p className="text-sm font-medium leading-none">
                     {user.user_metadata?.full_name || user.email}
                   </p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {user.email}
-                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <Link href="/account">
-                <DropdownMenuItem className="cursor-pointer">
-                  Configuración
-                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Configuración</DropdownMenuItem>
               </Link>
               <DropdownMenuItem
                 className="text-destructive focus:text-destructive cursor-pointer"

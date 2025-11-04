@@ -7,7 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toast } from 'sonner';
 import { Loader2, Camera, ArrowLeft } from 'lucide-react';
@@ -33,7 +40,7 @@ export default function EditProfile() {
     intereses: [],
     ubicacion: '',
     biografia: '',
-    avatar_url: null
+    avatar_url: null,
   });
   const [currentInteres, setCurrentInteres] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -43,7 +50,9 @@ export default function EditProfile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
         if (!user) {
           router.push('/login');
           return;
@@ -65,7 +74,7 @@ export default function EditProfile() {
             intereses: profileData.intereses || [],
             ubicacion: profileData.ubicacion || '',
             biografia: profileData.biografia || '',
-            avatar_url: profileData.avatar_url
+            avatar_url: profileData.avatar_url,
           });
         }
       } catch (error) {
@@ -81,86 +90,76 @@ export default function EditProfile() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setProfile(prev => ({
+    setProfile((prev) => ({
       ...prev,
-      [name]: name === 'edad' ? (value ? parseInt(value) : null) : value
+      [name]: name === 'edad' ? (value ? parseInt(value) : null) : value,
     }));
   };
 
   const handleAddInteres = () => {
     if (currentInteres.trim() && !profile.intereses.includes(currentInteres.trim())) {
-      setProfile(prev => ({
+      setProfile((prev) => ({
         ...prev,
-        intereses: [...prev.intereses, currentInteres.trim()]
+        intereses: [...prev.intereses, currentInteres.trim()],
       }));
       setCurrentInteres('');
     }
   };
 
   const handleRemoveInteres = (interes: string) => {
-    setProfile(prev => ({
+    setProfile((prev) => ({
       ...prev,
-      intereses: prev.intereses.filter(i => i !== interes)
+      intereses: prev.intereses.filter((i) => i !== interes),
     }));
   };
 
-  // ... (imports previos)
+  const handleImageUpload = async (file: File) => {
+    if (!file) return;
+    setUploading(true);
 
-const handleImageUpload = async (file: File) => {
-  if (!file) return;
-  setUploading(true);
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error('Usuario no autenticado');
 
-  try {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('Usuario no autenticado');
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/avatar.${fileExt}`;
 
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${user.id}/avatar.${fileExt}`;
+      const { data: existingFiles } = await supabase.storage.from('avatars').list(user.id + '/');
 
-    // 1. Eliminar avatar anterior si existe
-    const { data: existingFiles } = await supabase.storage
-      .from('avatars')
-      .list(user.id + '/');
-    
-    if (existingFiles?.length) {
-      await supabase.storage
-        .from('avatars')
-        .remove(existingFiles.map(f => `${user.id}/${f.name}`));
-    }
+      if (existingFiles?.length) {
+        await supabase.storage
+          .from('avatars')
+          .remove(existingFiles.map((f) => `${user.id}/${f.name}`));
+      }
 
-    // 2. Subir nuevo archivo
-    const { error: uploadError } = await supabase.storage
-      .from('avatars')
-      .upload(fileName, file, {
+      const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, file, {
         cacheControl: '3600',
-        upsert: true
+        upsert: true,
       });
 
-    if (uploadError) throw uploadError;
+      if (uploadError) throw uploadError;
 
-    // 3. Obtener URL firmada
-    const { data: signedUrlData, error: urlError } = await supabase.storage
-      .from('avatars')
-      .createSignedUrl(fileName, 3600); // Válida por 1 hora
+      const { data: signedUrlData, error: urlError } = await supabase.storage
+        .from('avatars')
+        .createSignedUrl(fileName, 3600);
 
-    if (urlError) throw urlError;
+      if (urlError) throw urlError;
 
-    // 4. Actualizar estado
-    setProfile(prev => ({ 
-      ...prev, 
-      avatar_url: signedUrlData?.signedUrl || '' 
-    }));
-    
-    toast.success('Imagen de perfil actualizada');
-  } catch (error) {
-    console.error('Error al subir la imagen:', error);
-    toast.error('Error al actualizar la imagen');
-  } finally {
-    setUploading(false);
-  }
-};
+      setProfile((prev) => ({
+        ...prev,
+        avatar_url: signedUrlData?.signedUrl || '',
+      }));
 
-// ... (resto del componente)
+      toast.success('Imagen de perfil actualizada');
+    } catch (error) {
+      console.error('Error al subir la imagen:', error);
+      toast.error('Error al actualizar la imagen');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -176,7 +175,7 @@ const handleImageUpload = async (file: File) => {
           ubicacion: profile.ubicacion,
           biografia: profile.biografia,
           avatar_url: profile.avatar_url,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', profile.id);
 
@@ -195,7 +194,7 @@ const handleImageUpload = async (file: File) => {
   const getInitials = (name: string) => {
     return name
       .split(' ')
-      .map(n => n[0])
+      .map((n) => n[0])
       .join('')
       .toUpperCase();
   };
@@ -239,17 +238,15 @@ const handleImageUpload = async (file: File) => {
             <Card>
               <CardHeader>
                 <CardTitle>Foto de perfil</CardTitle>
-                <CardDescription>
-                  Sube una foto que te represente
-                </CardDescription>
+                <CardDescription>Sube una foto que te represente</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex flex-col items-center">
                   <div className="relative group">
                     <Avatar className="h-32 w-32">
-                      <AvatarImage 
-                        src={profile.avatar_url || ''} 
-                        alt={profile.nombre} 
+                      <AvatarImage
+                        src={profile.avatar_url || ''}
+                        alt={profile.nombre}
                         className="object-cover"
                       />
                       <AvatarFallback className="text-2xl">
@@ -260,10 +257,10 @@ const handleImageUpload = async (file: File) => {
                       </div>
                     </Avatar>
                   </div>
-                  
+
                   <div className="mt-4">
-                    <Label 
-                      htmlFor="avatar-upload" 
+                    <Label
+                      htmlFor="avatar-upload"
                       className="cursor-pointer text-sm font-medium text-primary hover:underline"
                     >
                       Cambiar foto
@@ -292,17 +289,15 @@ const handleImageUpload = async (file: File) => {
               </CardContent>
             </Card>
 
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={isSaving}
-            >
+            <Button type="submit" className="w-full" disabled={isSaving}>
               {isSaving ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Guardando...
                 </>
-              ) : 'Guardar cambios'}
+              ) : (
+                'Guardar cambios'
+              )}
             </Button>
           </div>
 
@@ -311,9 +306,7 @@ const handleImageUpload = async (file: File) => {
             <Card>
               <CardHeader>
                 <CardTitle>Información personal</CardTitle>
-                <CardDescription>
-                  Actualiza tu información personal aquí
-                </CardDescription>
+                <CardDescription>Actualiza tu información personal aquí</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -368,11 +361,7 @@ const handleImageUpload = async (file: File) => {
                       }}
                       placeholder="Añadir interés"
                     />
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      onClick={handleAddInteres}
-                    >
+                    <Button type="button" variant="outline" onClick={handleAddInteres}>
                       Añadir
                     </Button>
                   </div>
