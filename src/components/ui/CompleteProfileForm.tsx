@@ -48,7 +48,7 @@ export default function CompleteProfileForm() {
 
   async function uploadAvatar(file: File, userId: string) {
     const supabase = createBrowserClient()
-    const path = `avatars/${userId}/${Date.now()}_${file.name}`
+    const path = `${userId}/${Date.now()}_${file.name}`
     const { error } = await supabase.storage.from('avatars').upload(path, file, { contentType: file.type })
     if (error) throw error
     const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path)

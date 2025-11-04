@@ -37,12 +37,14 @@ export async function POST(req: Request) {
 
   // upsert into perfil
   type ProfilePayload = {
-    id_usuario: string
+    id: string
+    username: string
+    email: string
     nombre: string
     edad: number
     ubicacion: string
     biografia: string | null
-    foto_url: string | null
+    avatar_url: string | null
     intereses: string[] | null
     interes_otro: string | null
     verificado: boolean
@@ -51,12 +53,14 @@ export async function POST(req: Request) {
   }
 
   const payload: ProfilePayload = {
-    id_usuario: userId,
+    id: userId,
+    username: user.user_metadata.username as string,
+    email: user.email as string,
     nombre: values.nombre,
     edad: values.edad,
     ubicacion: values.ubicacion,
     biografia: values.biografia ?? null,
-    foto_url: values.avatar_url ?? null,
+    avatar_url: values.avatar_url ?? null,
     intereses: values.intereses ?? null,
     interes_otro: values.interes_otro ?? null,
     verificado: true,
