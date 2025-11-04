@@ -6,17 +6,17 @@ import { type User } from '@supabase/supabase-js'
 export default function AccountForm({ user }: { user: User | null }) {
   const supabase = createClientClient()
   const [loading, setLoading] = useState(true)
-  const [fullname, setFullname] = useState<string | null>(null)
+  const [nombre, setNombre] = useState<string | null>(null)
   const [username, setUsername] = useState<string | null>(null)
-  const [website, setWebsite] = useState<string | null>(null)
+  const [edad, setEdad] = useState<string | null>(null)
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
 
   const getProfile = useCallback(async () => {
     try {
       setLoading(true)
       const { data, error, status } = await supabase
-        .from('profiles')
-        .select(`full_name, username, website, avatar_url`)
+        .from('perfil')
+        .select(`nombre, username, edad, avatar_url`)
         .eq('id', user?.id)
         .single()
       if (error && status !== 406) {
@@ -24,9 +24,9 @@ export default function AccountForm({ user }: { user: User | null }) {
         throw error
       }
       if (data) {
-        setFullname(data.full_name)
+        setNombre(data.nombre)
         setUsername(data.username)
-        setWebsite(data.website)
+        setEdad(data.edad)
         setAvatarUrl(data.avatar_url)
       }
     } catch (error) {
@@ -41,22 +41,22 @@ export default function AccountForm({ user }: { user: User | null }) {
   }, [user, getProfile])
 
   async function updateProfile({
-    username,
-    website,
+    nombre,
+    edad,
     avatar_url,
   }: {
     username: string | null
-    fullname: string | null
-    website: string | null
+    nombre: string | null
+    edad: string | null
     avatar_url: string | null
   }) {
     try {
       setLoading(true)
-      const { error } = await supabase.from('profiles').upsert({
+      const { error } = await supabase.from('perfil').upsert({
         id: user?.id as string,
-        full_name: fullname,
+        nombre: nombre,
         username,
-        website,
+        edad,
         avatar_url,
         updated_at: new Date().toISOString(),
       })
@@ -76,8 +76,8 @@ export default function AccountForm({ user }: { user: User | null }) {
         <input id="email" type="text" value={user?.email} disabled className="input" />
       </div>
       <div>
-        <label htmlFor="fullName">Full Name</label>
-        <input id="fullName" type="text" value={fullname || ''} onChange={(e) => setFullname(e.target.value)} className="input" />
+        <label htmlFor="fullName">Nombre</label>
+        <input id="fullName" type="text" value={nombre || ''} onChange={(e) => setNombre(e.target.value)} className="input" />
       </div>
       <div>
         <label htmlFor="username">Username</label>
@@ -85,10 +85,10 @@ export default function AccountForm({ user }: { user: User | null }) {
       </div>
       <div>
         <label htmlFor="website">Website</label>
-        <input id="website" type="url" value={website || ''} onChange={(e) => setWebsite(e.target.value)} className="input" />
+        <input id="website" type="url" value={edad || ''} onChange={(e) => setEdad(e.target.value)} className="input" />
       </div>
       <div className="mt-4">
-        <button className="button primary" onClick={() => updateProfile({ fullname, username, website, avatar_url })} disabled={loading}>
+        <button className="button primary" onClick={() => updateProfile({ nombre, username, edad, avatar_url })} disabled={loading}>
           {loading ? 'Loading ...' : 'Update'}
         </button>
       </div>
