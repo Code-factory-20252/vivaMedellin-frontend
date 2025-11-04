@@ -4,7 +4,7 @@ export interface Perfil {
   id: string;
   username: string;
   email: string;
-  nombre_completo?: string;
+  nombre?: string;
   edad?: number;
   ubicacion?: string;
   avatar_url?: string;
@@ -47,7 +47,7 @@ export interface CreatePerfilData {
 }
 
 export interface UpdatePerfilData {
-  nombre_completo?: string;
+  nombre?: string;
   edad?: number;
   ubicacion?: string;
   bio?: string;

@@ -59,7 +59,7 @@ export async function createUserProfile(userId: string, username: string, email:
  * Actualiza la información del perfil del usuario
  */
 export async function updateUserProfile(userId: string, profileData: {
-  nombre_completo?: string;
+  nombre?: string;
   edad?: number;
   ubicacion?: string;
   bio?: string;
