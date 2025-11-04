@@ -24,6 +24,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
     const description = n.description ?? '';
     const variant = n.variant ?? 'default';
 
+    // If an identical notice (title + description + variant) is already shown, skip to avoid duplicates
     if (
       notices.some(
         (x) =>

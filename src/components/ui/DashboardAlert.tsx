@@ -21,11 +21,14 @@ export default function DashboardAlert() {
         variant: 'default',
       });
       try {
+        // remove query params after showing the alert so it doesn't trigger again
         const url = new URL(window.location.href);
         url.searchParams.delete('msg');
         url.searchParams.delete('desc');
         router.replace(url.pathname + url.search);
-      } catch (e) {}
+      } catch (e) {
+        // noop
+      }
     }
   }, [msg, desc, alert, router]);
 

@@ -11,7 +11,10 @@ export default function ResendForm() {
     try {
       const form = new FormData();
       form.set('email', email);
-      const res = await fetch('/api/auth/resend', { method: 'POST', body: form });
+      const res = await fetch('/api/auth/resend', {
+        method: 'POST',
+        body: form,
+      });
       if (res.ok) setStatus('sent');
       else setStatus('failed');
     } catch (err) {

@@ -23,7 +23,9 @@ const profileSchema = z.object({
   nombre: z
     .string()
     .min(1)
-    .regex(/^[A-Za-zÀ-ÿ\s]+$/, { message: 'El nombre sólo puede contener letras y espacios' }),
+    .regex(/^[A-Za-zÀ-ÿ\s]+$/, {
+      message: 'El nombre sólo puede contener letras y espacios',
+    }),
   edad: z.preprocess((v) => Number(v), z.number().int().min(1).max(120)),
   intereses: z.array(z.string()).min(1),
   interes_otro: z.string().max(40).optional(),
@@ -99,7 +101,9 @@ export default function CompleteProfileForm() {
     if (avatarFile && userId) {
       try {
         avatarUrl = await uploadAvatar(avatarFile, String(userId));
-        alert.show({ title: 'La imagen de perfil se ha cargado exitosamente.' });
+        alert.show({
+          title: 'La imagen de perfil se ha cargado exitosamente.',
+        });
       } catch (e) {
         alert.show({
           title: 'Error',

@@ -8,9 +8,11 @@ export default async function CompleteProfilePage() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
+    // if not authenticated, redirect to login
     return <div>Please login to continue</div>;
   }
 
+  // check profile completed
   let profile = null;
   try {
     const res = await supabase
@@ -25,6 +27,7 @@ export default async function CompleteProfilePage() {
   }
 
   if (profile && profile.completed) {
+    // already completed; show message or redirect
     return <div>Tu perfil ya está completo.</div>;
   }
 

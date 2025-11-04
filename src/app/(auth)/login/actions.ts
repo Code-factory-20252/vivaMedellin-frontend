@@ -24,6 +24,7 @@ export async function login(formData: FormData) {
 export async function signup(formData: FormData) {
   const cookieStore = cookies();
   const supabase = await createClient(cookieStore);
+  // type-casting here for convenience - validate in production
   const data = {
     email: (formData.get('email') as string) ?? '',
     password: (formData.get('password') as string) ?? '',

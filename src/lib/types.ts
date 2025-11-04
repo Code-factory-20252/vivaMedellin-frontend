@@ -1,3 +1,5 @@
+// Tipos TypeScript para las tablas de perfil en Supabase
+
 export interface Perfil {
   id: string;
   username: string;
@@ -36,6 +38,7 @@ export interface UserProfile extends Perfil {
   perfil_complementario?: PerfilComplementario;
 }
 
+// Tipos para crear/actualizar perfiles
 export interface CreatePerfilData {
   username: string;
   email: string;
@@ -79,6 +82,7 @@ export interface UpdatePerfilComplementarioData {
   nivel_educacion?: string;
 }
 
+// Tipos para validación de formularios
 export interface RegisterFormData {
   username: string;
   email: string;
@@ -91,6 +95,7 @@ export interface LoginFormData {
   password: string;
 }
 
+// Tipos para respuestas de API
 export interface ApiResponse<T = any> {
   data?: T;
   error?: string;

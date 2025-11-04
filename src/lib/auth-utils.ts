@@ -1,6 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
 
+/**
+ * Verifica si un username ya existe en la base de datos
+ */
 export async function checkUsernameExists(username: string): Promise<boolean> {
   const supabase = await createClient(cookies());
 
@@ -11,16 +14,26 @@ export async function checkUsernameExists(username: string): Promise<boolean> {
     .single();
 
   if (error && error.code !== 'PGRST116') {
+    // PGRST116 es "not found"
     throw error;
   }
 
   return !!data;
 }
 
+/**
+ * Verifica si un email ya está registrado intentando crear un usuario temporal
+ * Nota: Esta función no es necesaria ya que Supabase Auth maneja la validación automáticamente
+ */
 export async function checkEmailExists(email: string): Promise<boolean> {
+  // No necesitamos esta función ya que Supabase Auth ya valida emails existentes
+  // y devuelve errores específicos cuando intentamos registrar un email ya existente
   return false;
 }
 
+/**
+ * Crea un perfil de usuario después del registro exitoso
+ */
 export async function createUserProfile(userId: string, username: string, email: string) {
   const supabase = await createClient(cookies());
 
@@ -41,6 +54,9 @@ export async function createUserProfile(userId: string, username: string, email:
   }
 }
 
+/**
+ * Actualiza la información del perfil del usuario
+ */
 export async function updateUserProfile(
   userId: string,
   profileData: {
@@ -69,6 +85,9 @@ export async function updateUserProfile(
   }
 }
 
+/**
+ * Obtiene la información del perfil del usuario
+ */
 export async function getUserProfile(userId: string) {
   const supabase = await createClient(cookies());
 
@@ -81,6 +100,9 @@ export async function getUserProfile(userId: string) {
   return data;
 }
 
+/**
+ * Verifica si el perfil del usuario está completo
+ */
 export async function isProfileComplete(userId: string): Promise<boolean> {
   const supabase = await createClient(cookies());
 

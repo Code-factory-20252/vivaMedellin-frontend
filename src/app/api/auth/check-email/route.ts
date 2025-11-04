@@ -9,6 +9,7 @@ export async function GET(request: Request) {
   }
 
   try {
+    // Validar formato del email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isValidFormat = emailRegex.test(email);
 
@@ -20,6 +21,7 @@ export async function GET(request: Request) {
       });
     }
 
+    // Verificar si el email parece ser de un dominio común de email temporal
     const tempEmailDomains = [
       '10minutemail.com',
       'guerrillamail.com',
@@ -42,6 +44,9 @@ export async function GET(request: Request) {
         message: 'No se permiten correos electrónicos temporales',
       });
     }
+
+    // Nota: La verificación real de existencia se hará en el servidor durante el registro
+    // ya que no tenemos acceso a las funciones admin desde el cliente
 
     return NextResponse.json({
       exists: false,

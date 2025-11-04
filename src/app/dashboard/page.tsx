@@ -37,11 +37,13 @@ export default function Dashboard() {
         data: { user },
       } = await supabase.auth.getUser();
 
+      // Cargar todos los eventos
       const { data: eventosData } = await supabase
         .from('eventos')
         .select('*')
         .order('fecha_inicio', { ascending: true });
 
+      // Cargar eventos favoritos del usuario
       const { data: favoritosData } = await supabase
         .from('eventos_favoritos')
         .select('id_evento')

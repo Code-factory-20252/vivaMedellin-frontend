@@ -28,20 +28,26 @@ export async function POST(req: Request) {
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ ok: false }, { status: 401 });
 
+  // Supabase auth user id is typically a UUID string. Keep it as string to avoid invalid coercion.
   const userId = String(user.id);
 
   const values = parsed.data;
 
+  // if intereses contains 'Otros', require interes_otro
   if (
     values.intereses.includes('Otros') &&
     (!values.interes_otro || !lettersOnly.test(values.interes_otro))
   ) {
     return NextResponse.json(
-      { ok: false, message: 'Interés "Otros" requiere texto válido (solo letras, max 40).' },
+      {
+        ok: false,
+        message: 'Interés "Otros" requiere texto válido (solo letras, max 40).',
+      },
       { status: 400 }
     );
   }
 
+  // upsert into perfil
   type ProfilePayload = {
     id: string;
     username: string;
@@ -74,11 +80,13 @@ export async function POST(req: Request) {
     updated_at: new Date().toISOString(),
   };
 
+  // try update first
   const { error: updateErr } = await supabase
     .from('perfil')
     .update(payload)
     .eq('id_usuario', userId);
   if (updateErr) {
+    // try insert
     const { error: insertErr } = await supabase.from('perfil').insert(payload);
     if (insertErr)
       return NextResponse.json({ ok: false, error: insertErr.message }, { status: 500 });
