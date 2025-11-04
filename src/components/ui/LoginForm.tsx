@@ -37,7 +37,6 @@ export default function LoginForm() {
         body: formData,
       });
       if (res.redirected) {
-        // show an alert and give it a tiny moment to appear before redirecting
         alert.show({
           title: 'Ha iniciado sesión con éxito',
           description: 'Redirigiendo...',

@@ -113,8 +113,6 @@ export default function EditProfile() {
     }));
   };
 
-  // ... (imports previos)
-
   const handleImageUpload = async (file: File) => {
     if (!file) return;
     setUploading(true);
@@ -128,7 +126,6 @@ export default function EditProfile() {
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}/avatar.${fileExt}`;
 
-      // 1. Eliminar avatar anterior si existe
       const { data: existingFiles } = await supabase.storage.from('avatars').list(user.id + '/');
 
       if (existingFiles?.length) {
@@ -137,7 +134,6 @@ export default function EditProfile() {
           .remove(existingFiles.map((f) => `${user.id}/${f.name}`));
       }
 
-      // 2. Subir nuevo archivo
       const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, file, {
         cacheControl: '3600',
         upsert: true,
@@ -145,14 +141,12 @@ export default function EditProfile() {
 
       if (uploadError) throw uploadError;
 
-      // 3. Obtener URL firmada
       const { data: signedUrlData, error: urlError } = await supabase.storage
         .from('avatars')
-        .createSignedUrl(fileName, 3600); // Válida por 1 hora
+        .createSignedUrl(fileName, 3600);
 
       if (urlError) throw urlError;
 
-      // 4. Actualizar estado
       setProfile((prev) => ({
         ...prev,
         avatar_url: signedUrlData?.signedUrl || '',
@@ -166,8 +160,6 @@ export default function EditProfile() {
       setUploading(false);
     }
   };
-
-  // ... (resto del componente)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

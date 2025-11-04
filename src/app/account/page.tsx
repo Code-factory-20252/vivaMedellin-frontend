@@ -62,7 +62,6 @@ export default function AccountPage() {
 
       if (!user) return;
 
-      // Cargar perfil del usuario
       const { data: perfilData } = await supabase
         .from('perfil')
         .select(
@@ -73,14 +72,12 @@ export default function AccountPage() {
         .eq('id', user.id)
         .single();
 
-      // Cargar contadores de perfil
       const { data: contadoresData } = await supabase
         .from('vista_contadores_perfil')
         .select('*')
         .eq('id_usuario', user.id)
         .single();
 
-      // Cargar eventos favoritos
       const { data: favoritosData } = await supabase
         .from('eventos_favoritos')
         .select('*')

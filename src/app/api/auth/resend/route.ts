@@ -8,11 +8,9 @@ export async function POST(request: Request) {
   if (!email) return NextResponse.json({ error: 'missing_email' }, { status: 400 });
 
   const supabase = await createClient(cookies());
-  // Attempt to send a magic link / OTP email to the user
   const { data, error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      // ensure confirmation link returns to our confirm endpoint
       emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/auth/confirm`,
     },
   });

@@ -17,6 +17,14 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
+  return handleProfileRequest(req, 'POST');
+}
+
+export async function PATCH(req: Request) {
+  return handleProfileRequest(req, 'PATCH');
+}
+
+async function handleProfileRequest(req: Request, method: 'POST' | 'PATCH') {
   const body = await req.json();
   const parsed = schema.safeParse(body);
   if (!parsed.success)
@@ -28,12 +36,10 @@ export async function POST(req: Request) {
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ ok: false }, { status: 401 });
 
-  // Supabase auth user id is typically a UUID string. Keep it as string to avoid invalid coercion.
   const userId = String(user.id);
 
   const values = parsed.data;
 
-  // if intereses contains 'Otros', require interes_otro
   if (
     values.intereses.includes('Otros') &&
     (!values.interes_otro || !lettersOnly.test(values.interes_otro))
@@ -47,24 +53,13 @@ export async function POST(req: Request) {
     );
   }
 
-  // upsert into perfil
-  type ProfilePayload = {
-    id: string;
-    username: string;
-    email: string;
-    nombre: string;
-    edad: number;
-    ubicacion: string;
-    biografia: string | null;
-    avatar_url: string | null;
-    intereses: string[] | null;
-    interes_otro: string | null;
-    verificado: boolean;
-    completed: boolean;
-    updated_at: string;
-  };
+  const { data: existingProfile, error: fetchError } = await supabase
+    .from('perfil')
+    .select('id')
+    .eq('id', userId)
+    .single();
 
-  const payload: ProfilePayload = {
+  const profileData = {
     id: userId,
     username: user.user_metadata.username as string,
     email: user.email as string,
@@ -80,16 +75,30 @@ export async function POST(req: Request) {
     updated_at: new Date().toISOString(),
   };
 
-  // try update first
-  const { error: updateErr } = await supabase
-    .from('perfil')
-    .update(payload)
-    .eq('id_usuario', userId);
-  if (updateErr) {
-    // try insert
-    const { error: insertErr } = await supabase.from('perfil').insert(payload);
-    if (insertErr)
-      return NextResponse.json({ ok: false, error: insertErr.message }, { status: 500 });
+  let error;
+
+  if (existingProfile) {
+    const { error: updateError } = await supabase
+      .from('perfil')
+      .update(profileData)
+      .eq('id', userId);
+    error = updateError;
+  } else {
+    const { error: insertError } = await supabase
+      .from('perfil')
+      .insert([{ ...profileData, id: undefined }]); // No incluir el ID para que se genere automáticamente
+    error = insertError;
+  }
+
+  if (error) {
+    console.error('Error al guardar el perfil:', error);
+    return NextResponse.json(
+      {
+        ok: false,
+        error: error.message || 'Error al guardar el perfil',
+      },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ ok: true });

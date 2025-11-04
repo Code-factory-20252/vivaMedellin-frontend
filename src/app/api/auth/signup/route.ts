@@ -9,14 +9,12 @@ export async function POST(request: Request) {
   const password = formData.get('password') as string;
   const username = formData.get('username') as string;
 
-  // Validaciones básicas
   if (!email || !password || !username) {
     const redirectUrl = new URL('/register', request.url);
     redirectUrl.searchParams.set('error', 'Todos los campos son obligatorios');
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Validar formato del email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     const redirectUrl = new URL('/register', request.url);
@@ -25,7 +23,6 @@ export async function POST(request: Request) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Validar username (solo caracteres alfanuméricos y guiones bajos)
   const usernameRegex = /^[a-zA-Z0-9_]+$/;
   if (!usernameRegex.test(username) || username.length < 3 || username.length > 20) {
     const redirectUrl = new URL('/register', request.url);
@@ -38,7 +35,6 @@ export async function POST(request: Request) {
   }
 
   try {
-    // Verificar si el username ya existe
     const usernameExists = await checkUsernameExists(username);
     if (usernameExists) {
       const redirectUrl = new URL('/register', request.url);
@@ -49,7 +45,6 @@ export async function POST(request: Request) {
 
     const supabase = await createClient(cookies());
 
-    // Intentar crear el usuario en Supabase Auth
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -64,7 +59,6 @@ export async function POST(request: Request) {
       let errorMessage = 'Error en el registro';
       let errorField = null;
 
-      // Manejar errores específicos de Supabase
       if (error.message.includes('User already registered')) {
         errorMessage = 'El correo electrónico ya está registrado';
         errorField = 'email';
@@ -86,13 +80,11 @@ export async function POST(request: Request) {
       return NextResponse.redirect(redirectUrl);
     }
 
-    // Si el usuario se creó exitosamente, crear el perfil
     if (data.user) {
       try {
         await createUserProfile(data.user.id, username, email);
       } catch (profileError) {
         console.error('Error creando perfil:', profileError);
-        // No fallar el registro si hay error en el perfil, pero loguear el error
       }
     }
 

@@ -54,7 +54,7 @@ export default function RegisterForm() {
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
-    mode: 'onChange', // Validación en tiempo real
+    mode: 'onChange',
     defaultValues: {
       username: '',
       email: '',
@@ -63,7 +63,6 @@ export default function RegisterForm() {
     },
   });
 
-  // Función para verificar username con debouncing
   const checkUsernameAvailability = React.useMemo(() => {
     const debounce = (func: Function, delay: number) => {
       let timeoutId: NodeJS.Timeout;
@@ -96,10 +95,9 @@ export default function RegisterForm() {
       } finally {
         setCheckingUsername(false);
       }
-    }, 500); // 500ms delay
+    }, 500);
   }, [form]);
 
-  // Función para verificar email con debouncing
   const checkEmailAvailability = React.useMemo(() => {
     const debounce = (func: Function, delay: number) => {
       let timeoutId: NodeJS.Timeout;
@@ -132,15 +130,13 @@ export default function RegisterForm() {
         }
       } catch (error) {
         console.error('Error checking email:', error);
-        // Si hay error, limpiar errores para no bloquear al usuario
         form.clearErrors('email');
       } finally {
         setCheckingEmail(false);
       }
-    }, 500); // 500ms delay
+    }, 500);
   }, [form]);
 
-  // Manejar errores del servidor que vienen en los parámetros de URL
   React.useEffect(() => {
     const error = searchParams.get('error');
     const field = searchParams.get('field');
@@ -149,18 +145,15 @@ export default function RegisterForm() {
       setServerError(error);
       if (field) {
         setFieldError(field);
-        // Enfocar el campo que tiene error
         const fieldElement = document.getElementById(field);
         if (fieldElement) {
           fieldElement.focus();
         }
       }
 
-      // Limpiar los parámetros de la URL después de 5 segundos
       setTimeout(() => {
         setServerError(null);
         setFieldError(null);
-        // Remover los parámetros de error de la URL
         const newUrl = new URL(window.location.href);
         newUrl.searchParams.delete('error');
         newUrl.searchParams.delete('field');
