@@ -33,7 +33,6 @@ describe('Auth actions (login & signup)', () => {
 
   // ---------- TEST LOGIN ----------
   test('login - redirige a /account si el inicio de sesión es exitoso', async () => {
-    // Arrange
     const mockFormData = new FormData()
     mockFormData.set('email', 'test@example.com')
     mockFormData.set('password', '123456')
@@ -44,13 +43,11 @@ describe('Auth actions (login & signup)', () => {
       }
     }
 
-    ;(createClient as jest.Mock).mockResolvedValue(mockSupabase)
-    ;(cookies as jest.Mock).mockReturnValue({})
+    createClient.mockResolvedValue(mockSupabase)
+    cookies.mockReturnValue({})
 
-    // Act
     await login(mockFormData)
 
-    // Assert
     expect(mockSupabase.auth.signInWithPassword).toHaveBeenCalledWith({
       email: 'test@example.com',
       password: '123456',
@@ -60,7 +57,6 @@ describe('Auth actions (login & signup)', () => {
   })
 
   test('login - redirige a /error si ocurre un error', async () => {
-    // Arrange
     const mockFormData = new FormData()
     mockFormData.set('email', 'fail@example.com')
     mockFormData.set('password', 'wrong')
@@ -71,19 +67,16 @@ describe('Auth actions (login & signup)', () => {
       }
     }
 
-    ;(createClient as jest.Mock).mockResolvedValue(mockSupabase)
-    ;(cookies as jest.Mock).mockReturnValue({})
+    createClient.mockResolvedValue(mockSupabase)
+    cookies.mockReturnValue({})
 
-    // Act
     await login(mockFormData)
 
-    // Assert
     expect(redirect).toHaveBeenCalledWith('/error')
   })
 
   // ---------- TEST SIGNUP ----------
   test('signup - redirige a /account si el registro es exitoso', async () => {
-    // Arrange
     const mockFormData = new FormData()
     mockFormData.set('email', 'newuser@example.com')
     mockFormData.set('password', 'abcdef')
@@ -94,13 +87,11 @@ describe('Auth actions (login & signup)', () => {
       }
     }
 
-    ;(createClient as jest.Mock).mockResolvedValue(mockSupabase)
-    ;(cookies as jest.Mock).mockReturnValue({})
+    createClient.mockResolvedValue(mockSupabase)
+    cookies.mockReturnValue({})
 
-    // Act
     await signup(mockFormData)
 
-    // Assert
     expect(mockSupabase.auth.signUp).toHaveBeenCalledWith({
       email: 'newuser@example.com',
       password: 'abcdef',
@@ -110,7 +101,6 @@ describe('Auth actions (login & signup)', () => {
   })
 
   test('signup - redirige a /error si ocurre un error en el registro', async () => {
-    // Arrange
     const mockFormData = new FormData()
     mockFormData.set('email', 'error@example.com')
     mockFormData.set('password', '123')
@@ -121,13 +111,11 @@ describe('Auth actions (login & signup)', () => {
       }
     }
 
-    ;(createClient as jest.Mock).mockResolvedValue(mockSupabase)
-    ;(cookies as jest.Mock).mockReturnValue({})
+    createClient.mockResolvedValue(mockSupabase)
+    cookies.mockReturnValue({})
 
-    // Act
     await signup(mockFormData)
 
-    // Assert
     expect(redirect).toHaveBeenCalledWith('/error')
   })
 })
