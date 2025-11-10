@@ -28,7 +28,7 @@ jobs:
         run: npm ci
 
       - name: Run tests (with coverage)
-        run: npm test -- --coverage --watchAll=false
+        run: npm test -- --coverage --coverageReporters=lcov --watchAll=false
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
