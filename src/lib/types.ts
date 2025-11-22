@@ -128,3 +128,18 @@ export interface FollowResponse {
   total_seguidores?: number;
   total_siguiendo?: number;
 }
+// Password Reset Types
+export interface PasswordResetRequest {
+  email: string;
+}
+
+export interface PasswordResetData {
+  password: string;
+  confirmPassword: string;
+}
+
+export interface PasswordResetResponse {
+  success: boolean;
+  message: string;
+  error?: string;
+}

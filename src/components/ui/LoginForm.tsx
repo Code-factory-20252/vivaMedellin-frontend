@@ -111,8 +111,8 @@ export default function LoginForm() {
         />
 
         {/* Forgot password */}
-        <a href="#" className="text-sm text-blue-500 hover:underline self-end">
-          ¿Olvidaste tu contraseña?
+        <a href="/forgot-password" className="text-sm text-blue-500 hover:underline self-end">
+          ¿Olvidó su contraseña?
         </a>
 
         {/* Submit button */}
