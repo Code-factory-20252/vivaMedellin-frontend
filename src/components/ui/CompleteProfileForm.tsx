@@ -82,11 +82,25 @@ export default function CompleteProfileForm() {
 
   async function uploadAvatar(file: File, userId: string) {
     const supabase = createBrowserClient();
-    const path = `${userId}/${Date.now()}_${file.name}`;
-    const { error } = await supabase.storage
-      .from('avatars')
-      .upload(path, file, { contentType: file.type });
+    const fileExt = file.name.split('.').pop();
+    const path = `${userId}/avatar.${fileExt}`;
+
+    // Remove existing avatars for this user
+    const { data: existingFiles } = await supabase.storage.from('avatars').list(userId + '/');
+    if (existingFiles?.length) {
+      await supabase.storage
+        .from('avatars')
+        .remove(existingFiles.map((f) => `${userId}/${f.name}`));
+    }
+
+    // Upload new avatar
+    const { error } = await supabase.storage.from('avatars').upload(path, file, {
+      contentType: file.type,
+      upsert: true,
+    });
     if (error) throw error;
+
+    // Get public URL (permanent, no expiration)
     const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path);
     return urlData.publicUrl;
   }

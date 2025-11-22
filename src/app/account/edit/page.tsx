@@ -126,6 +126,7 @@ export default function EditProfile() {
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}/avatar.${fileExt}`;
 
+      // Remove existing avatars for this user
       const { data: existingFiles } = await supabase.storage.from('avatars').list(user.id + '/');
 
       if (existingFiles?.length) {
@@ -134,6 +135,7 @@ export default function EditProfile() {
           .remove(existingFiles.map((f) => `${user.id}/${f.name}`));
       }
 
+      // Upload new avatar
       const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, file, {
         cacheControl: '3600',
         upsert: true,
@@ -141,15 +143,12 @@ export default function EditProfile() {
 
       if (uploadError) throw uploadError;
 
-      const { data: signedUrlData, error: urlError } = await supabase.storage
-        .from('avatars')
-        .createSignedUrl(fileName, 3600);
-
-      if (urlError) throw urlError;
+      // Get public URL (permanent, no expiration)
+      const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(fileName);
 
       setProfile((prev) => ({
         ...prev,
-        avatar_url: signedUrlData?.signedUrl || '',
+        avatar_url: publicUrlData.publicUrl,
       }));
 
       toast.success('Imagen de perfil actualizada');
