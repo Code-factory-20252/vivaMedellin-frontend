@@ -113,3 +113,18 @@ export interface UserSearchResult {
   ubicacion?: string;
   is_following?: boolean;
 }
+
+export interface FollowingUser {
+  id: string;
+  username: string;
+  nombre: string;
+  avatar_url?: string;
+  is_following: boolean;
+}
+
+export interface FollowResponse {
+  success: boolean;
+  message: string;
+  total_seguidores?: number;
+  total_siguiendo?: number;
+}
