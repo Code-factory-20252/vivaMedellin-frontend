@@ -101,3 +101,15 @@ export interface AuthResponse {
   user: any;
   session: any;
 }
+
+// User Search and Follow Types
+export interface UserSearchResult {
+  id: string;
+  username: string;
+  nombre: string;
+  email: string;
+  avatar_url?: string;
+  edad?: number;
+  ubicacion?: string;
+  is_following?: boolean;
+}
