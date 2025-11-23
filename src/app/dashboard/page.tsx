@@ -193,12 +193,6 @@ export default function Dashboard() {
                   <span className="line-clamp-1">{evento.ubicacion}</span>
                 </div>
               </CardContent>
-
-              <CardFooter>
-                <Button variant="outline" className="w-full" asChild>
-                  <Link href={`/eventos/${evento.id}`}>Ver más detalles</Link>
-                </Button>
-              </CardFooter>
             </Card>
           );
         })}

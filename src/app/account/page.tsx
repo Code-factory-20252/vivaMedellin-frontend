@@ -16,6 +16,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import {
   MapPin,
   Calendar,
   User,
@@ -25,6 +32,7 @@ import {
   Calendar as CalendarIcon,
   ArrowLeft,
   Edit,
+  Clock,
 } from 'lucide-react';
 import Link from 'next/link';
 import { FollowingList } from '@/components/ui/FollowingList';
@@ -46,8 +54,19 @@ interface Perfil {
 
 interface EventoFavorito {
   id: string;
+  id_evento: string;
   titulo_evento: string;
   creado_en: string;
+}
+
+interface EventoDetalle {
+  id: string;
+  titulo: string;
+  descripcion: string;
+  fecha_inicio: string;
+  fecha_fin: string;
+  ubicacion: string;
+  imagen_url?: string;
 }
 
 export default function AccountPage() {
@@ -57,6 +76,9 @@ export default function AccountPage() {
   const [loading, setLoading] = useState(true);
   const [loadingSiguiendo, setLoadingSiguiendo] = useState(false);
   const [activeTab, setActiveTab] = useState('favoritos');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEvento, setSelectedEvento] = useState<EventoDetalle | null>(null);
+  const [loadingEvento, setLoadingEvento] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
@@ -126,6 +148,42 @@ export default function AccountPage() {
       }
     }
     setLoadingSiguiendo(false);
+  };
+
+  const loadEventoDetalle = async (eventoId: string) => {
+    setLoadingEvento(true);
+    setIsModalOpen(true);
+
+    try {
+      const { data: eventoData } = await supabase
+        .from('eventos')
+        .select('*')
+        .eq('id', eventoId)
+        .single();
+
+      if (eventoData) {
+        setSelectedEvento(eventoData);
+      }
+    } catch (error) {
+      console.error('Error loading event details:', error);
+    } finally {
+      setLoadingEvento(false);
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  };
+
+  const formatTime = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   };
 
   if (loading) {
@@ -349,8 +407,12 @@ export default function AccountPage() {
                               })}
                             </p>
                           </div>
-                          <Button variant="outline" size="sm" asChild>
-                            <Link href={`/eventos/${evento.id}`}>Ver evento</Link>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => loadEventoDetalle(evento.id_evento)}
+                          >
+                            Ver evento
                           </Button>
                         </div>
                       ))}
@@ -399,6 +461,68 @@ export default function AccountPage() {
           </Card>
         </div>
       </div>
+
+      {/* Event Detail Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          {loadingEvento ? (
+            <div className="flex items-center justify-center py-8">
+              <p className="text-muted-foreground">Cargando detalles del evento...</p>
+            </div>
+          ) : selectedEvento ? (
+            <>
+              {selectedEvento.imagen_url && (
+                <div className="-mx-6 -mt-6 mb-4">
+                  <img
+                    src={selectedEvento.imagen_url}
+                    alt={selectedEvento.titulo}
+                    className="w-full h-64 object-cover rounded-t-lg"
+                  />
+                </div>
+              )}
+              <DialogHeader>
+                <DialogTitle className="text-2xl">{selectedEvento.titulo}</DialogTitle>
+                <DialogDescription className="text-base mt-2">
+                  {selectedEvento.descripcion}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-4 mt-4">
+                <div className="flex items-center text-sm">
+                  <Calendar className="mr-3 h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <span className="font-medium">Fecha: </span>
+                    <span>{formatDate(selectedEvento.fecha_inicio)}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center text-sm">
+                  <Clock className="mr-3 h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <span className="font-medium">Hora: </span>
+                    <span>
+                      {formatTime(selectedEvento.fecha_inicio)} -{' '}
+                      {formatTime(selectedEvento.fecha_fin)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-start text-sm">
+                  <MapPin className="mr-3 h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-medium">Lugar: </span>
+                    <span>{selectedEvento.ubicacion}</span>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">No se pudo cargar el evento.</p>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
