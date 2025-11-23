@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 import { z } from 'zod';
+import { sendWelcomeEmail } from '@/lib/email';
 
 const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/;
 const lettersOnly = /^[A-Za-zÀ-ÿ\s]+$/;
@@ -99,6 +100,17 @@ async function handleProfileRequest(req: Request, method: 'POST' | 'PATCH') {
       },
       { status: 500 }
     );
+  }
+
+  if (profileData.completed && profileData.email) {
+    try {
+      await sendWelcomeEmail({
+        to: profileData.email,
+        username: profileData.username || profileData.nombre,
+      });
+    } catch (emailError) {
+      console.error('Error sending welcome email:', emailError);
+    }
   }
 
   return NextResponse.json({ ok: true });

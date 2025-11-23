@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import CompleteProfileForm from '@/components/ui/CompleteProfileForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -49,28 +50,7 @@ export default async function CompleteProfilePage() {
   }
 
   if (profile?.completed) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
-        <Card className="w-full max-w-md text-center">
-          <CardHeader className="space-y-4">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-              <CheckCircle2 className="h-8 w-8 text-green-600" />
-            </div>
-            <CardTitle className="text-2xl font-bold">¡Perfil completo!</CardTitle>
-            <CardDescription className="text-gray-600">
-              Tu perfil ya está completo. Redirigiendo al panel de control...
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-2">
-            <div className="flex justify-center">
-              <div className="h-2 w-24 rounded-full bg-gray-200">
-                <div className="h-2 animate-pulse rounded-full bg-primary"></div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    redirect('/dashboard');
   }
 
   return (

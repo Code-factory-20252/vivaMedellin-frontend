@@ -80,14 +80,6 @@ export async function POST(request: Request) {
       return NextResponse.redirect(redirectUrl);
     }
 
-    if (data.user) {
-      try {
-        await createUserProfile(data.user.id, username, email);
-      } catch (profileError) {
-        console.error('Error creando perfil:', profileError);
-      }
-    }
-
     const redirectUrl = new URL('/login', request.url);
     redirectUrl.searchParams.set('msg', 'signup_success');
     redirectUrl.searchParams.set(
