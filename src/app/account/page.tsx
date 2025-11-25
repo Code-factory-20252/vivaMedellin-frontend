@@ -508,7 +508,7 @@ export default function AccountPage() {
                 </div>
 
                 <div className="flex items-start text-sm">
-                  <MapPin className="mr-3 h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                  <MapPin className="mr-3 h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
                   <div>
                     <span className="font-medium">Lugar: </span>
                     <span>{selectedEvento.ubicacion}</span>

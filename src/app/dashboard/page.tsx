@@ -14,7 +14,6 @@ import { Button } from '@/components/ui/button';
 import { Heart, MapPin, Calendar, Clock } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SearchBar } from '@/components/ui/SearchBar';
-import Link from 'next/link';
 
 interface Evento {
   id: string;
