@@ -457,7 +457,7 @@ export default function RegisterForm() {
 
           {/* Estado del formulario para debugging */}
           {process.env.NODE_ENV === 'development' && (
-            <div className="text-xs text-gray-500 mt-2 p-2 bg-gray-100 rounded">
+            <div className="text-xs text-gray-500 mt-2 p-2 bg-gray-100 rounded dark:text-gray-200 dark:bg-gray-800">
               <div>Form Valid: {form.formState.isValid ? '✅' : '❌'}</div>
               <div>Errors: {Object.keys(form.formState.errors).length}</div>
               <div>
@@ -465,7 +465,7 @@ export default function RegisterForm() {
               </div>
             </div>
           )}
-          <p className="self-center leading-2 text-slate-700">
+          <p className="self-center leading-2 text-slate-700 dark:text-slate-300">
             ¿Ya tienes cuenta?{' '}
             <Link className="font-semibold text-sky-500" href="./login">
               Iniciar sesión
