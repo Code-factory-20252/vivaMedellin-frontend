@@ -29,7 +29,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip middleware for public routes and assets
-  const publicPaths = ['/login', '/register', '/forgot-password', '/reset-password', '/error'];
+  const publicPaths = ['/', '/login', '/register', '/forgot-password', '/reset-password', '/error'];
   const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
   const isApiRoute = pathname.startsWith('/api');
   const isStaticAsset =
