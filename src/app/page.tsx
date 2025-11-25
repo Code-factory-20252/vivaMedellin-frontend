@@ -13,11 +13,13 @@ export default async function Home() {
         <Image fill className="-z-10 absolute opacity-30" src="/img/udea.jpg" alt="" />
         <div className="flex items-center gap-4 top-44">
           <Image width={50} height={50} src="/img/logo.png" alt="" />
-          <h1 className="text-zinc-800 font-bold text-[64px] leading-[23px] tracking-[0px]">
+          <h1 className="text-zinc-800 font-bold text-[64px] leading-[23px] tracking-[0px] dark:text-zinc-300">
             VivaMedellín
           </h1>
         </div>
-        <h1 className="text-6xl font-bold text-slate-700">Dashboard en Desarrollo</h1>
+        <h1 className="text-6xl font-bold text-slate-700 dark:text-slate-300">
+          Dashboard en Desarrollo
+        </h1>
         <div className="flex gap-10 bg-accent w-fit h-fit py-5 px-10 rounded-md">
           <Link className="leading-2 font-semibold text-sky-500" href="/register">
             Registrarse

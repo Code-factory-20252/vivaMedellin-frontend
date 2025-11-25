@@ -59,7 +59,7 @@ export function SearchBar() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query && setShowResults(true)}
-          className="pl-10 pr-10"
+          className="pl-10 pr-10  dark:border-slate-600"
         />
         {query && (
           <button

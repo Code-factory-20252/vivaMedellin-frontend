@@ -8,7 +8,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         <header className="absolute mt-0 flex p-10">
           <div className="w-36 h-6 flex items-center gap-4">
             <Image width={16} height={16} src="/img/logo.png" alt="" />
-            <h1 className="text-zinc-800 font-bold text-[18px] leading-[23px] tracking-[0px]">
+            <h1 className="text-zinc-800 font-bold text-[18px] leading-[23px] tracking-[0px] dark:text-zinc-300">
               VivaMedellín
             </h1>
           </div>
